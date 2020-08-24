@@ -1,16 +1,18 @@
 const jwt = require('jsonwebtoken')
 const User = require('../DbSchema/user')
+const States = require('../DbSchema/states')
+const Cities = require('../DbSchema/cities')
 
 const auth = async (req, res, next) => {
     try {
         //console.log(req.header('Authorization'))
         const token = req.header('Authorization').replace('Bearer ', '')
-        const decoded = jwt.verify(token, 'thisismyuser')
+        const decodedToken = jwt.verify(token, 'thisismyuser')
         // console.log(decoded)
-        const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
+        const user = await User.findOne({ _id: decodedToken._id, 'tokens.token': token })
 
         if (!user) {
-            throw new Error();
+            throw new Error({ error: 'Inavlid authentication' });
         }
 
         req.token = token
@@ -24,4 +26,40 @@ const auth = async (req, res, next) => {
 
 }
 
-module.exports = auth
+const authState = async (req, res, next) => {
+    try {
+        const stateToken = req.header('Authorization').replace('Bearer ', '');
+        const decodedStateToken = jwt.verify(stateToken, 'thisismystate');
+        const state = await States.findOne({ _id: decodedStateToken._id })
+        if (!state) {
+            throw new Error({ error: 'Invalid authentication for state' });
+        }
+        req.token = stateToken;
+        req.state = state
+        next()
+    } catch (error) {
+        res.status(400).send({ error: 'Invalid authentication for state' })
+    }
+}
+const authCity = async (req, res, next) => {
+
+    try {
+        const cityToken = req.header('Authorization').replace('Bearer ', '');
+        const decodedCityToken = jwt.verify(cityToken, 'thisismycity');
+        const city = await Cities.findOne({ _id: decodedCityToken._id })
+        console.log(city)
+        if (!city) {
+            throw new Error({ error: 'Invalid authentication for city' });
+        }
+        console.log(city)
+        req.token = cityToken;
+        req.city = city
+        next()
+    } catch (error) {
+        res.status(400).send({ error: 'Invalid authentication for city' })
+    }
+}
+
+module.exports.auth = auth
+module.exports.authState = authState
+module.exports.authCity = authCity

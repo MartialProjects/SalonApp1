@@ -1,9 +1,9 @@
 const express = require('express')
 const Order = require('../DbSchema/Orders')
-const auth = require('../Auth-middlewere/auth')
+const authObj = require('../Auth-middlewere/auth')
 const router = new express.Router();
 
-router.post('/Orders', auth, async (req, res) => {
+router.post('/CreateOrder', authObj.auth, async (req, res) => {
     //const order = new Order(req.body);
     const order = new Order({
         ...req.body,
@@ -14,12 +14,12 @@ router.post('/Orders', auth, async (req, res) => {
         await order.save()
         res.status(201).send(order)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).send({ error: 'Order not created' })
 
     }
 })
 
-router.get('/Orders', auth, async (req, res) => {
+router.get('/GetOrdersFromLoggedUser', authObj.auth, async (req, res) => {
     try {
         //const order = await Order.find({})
         await req.user.populate('myOrders').execPopulate();
@@ -27,14 +27,14 @@ router.get('/Orders', auth, async (req, res) => {
         res.status(201).send(req.user.myOrders)
 
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).send({ error: "Error fetching orders" })
 
     }
 
 
 
 })
-router.get('/Orders/:id', auth, async (req, res) => {
+router.get('/GetSingleOrder/:id', authObj.auth, async (req, res) => {
     const _id = req.params.id
     try {
         const order = await Order.findOne({ _id, owner: req.user._id })
@@ -43,13 +43,13 @@ router.get('/Orders/:id', auth, async (req, res) => {
         }
         res.send(order)
     } catch (error) {
-        res.status(500).send(error)
+        res.status(500).send({ error: 'Error while getting order' })
 
     }
 
 
 })
-router.patch('/Orders/:id', auth, async (req, res) => {
+router.patch('/UpdateOrder/:id', authObj.auth, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['description', 'completed']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -67,10 +67,10 @@ router.patch('/Orders/:id', auth, async (req, res) => {
         await order.save()
         res.status(200).send(order)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).send({ error: 'Order not updated' })
     }
 })
-router.delete('/Orders/:id', auth, async (req, res) => {
+router.delete('/DeleteOrder/:id', authObj.auth, async (req, res) => {
     try {
         const order = await Order.findByIdAndDelete({ _id: req.params.id, owner: req.user._id });
         if (!order) {
@@ -79,7 +79,7 @@ router.delete('/Orders/:id', auth, async (req, res) => {
         res.status(200).send(order)
 
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).send({ error: 'Order not deleted' })
     }
 
 })
