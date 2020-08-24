@@ -14,8 +14,6 @@ const userSchema = new mongoose.Schema({
     mobileNo: {
         type: Number,
         unique: true,
-        min: 10,
-        max: 10,
         required: true
     },
     emailId: {
