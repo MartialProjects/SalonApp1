@@ -17,7 +17,7 @@ const stateSchema = new mongoose.Schema({
 
 stateSchema.methods.generateTokenForState = async function () {
 
-    const token = jwtState.sign({ _id: this._id.toString() }, 'thisismystate')
+    const token = jwtState.sign({ _id: this._id.toString() }, process.env.JWT_STATE)
     return token
 }
 

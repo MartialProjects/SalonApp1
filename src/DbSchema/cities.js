@@ -17,7 +17,7 @@ const citySchema = new mongoose.Schema({
 
 citySchema.methods.generateTokenForCity = async function () {
 
-    const token = jwt.sign({ _id: this._id.toString() }, 'thisismycity')
+    const token = jwt.sign({ _id: this._id.toString() }, process.env.JWT_CITY)
     return token
 }
 

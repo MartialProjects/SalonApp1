@@ -7,7 +7,7 @@ const auth = async (req, res, next) => {
     try {
         //console.log(req.header('Authorization'))
         const token = req.header('Authorization').replace('Bearer ', '')
-        const decodedToken = jwt.verify(token, 'thisismyuser')
+        const decodedToken = jwt.verify(token, process.env.JWT_USER)
         // console.log(decoded)
         const user = await User.findOne({ _id: decodedToken._id, 'tokens.token': token })
 
@@ -29,7 +29,7 @@ const auth = async (req, res, next) => {
 const authState = async (req, res, next) => {
     try {
         const stateToken = req.header('Authorization').replace('Bearer ', '');
-        const decodedStateToken = jwt.verify(stateToken, 'thisismystate');
+        const decodedStateToken = jwt.verify(stateToken, process.env.JWT_STATE);
         const state = await States.findOne({ _id: decodedStateToken._id })
         if (!state) {
             throw new Error({ error: 'Invalid authentication for state' });
@@ -45,7 +45,7 @@ const authCity = async (req, res, next) => {
 
     try {
         const cityToken = req.header('Authorization').replace('Bearer ', '');
-        const decodedCityToken = jwt.verify(cityToken, 'thisismycity');
+        const decodedCityToken = jwt.verify(cityToken, process.env.JWT_CITY);
         const city = await Cities.findOne({ _id: decodedCityToken._id })
         console.log(city)
         if (!city) {
