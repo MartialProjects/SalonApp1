@@ -47,8 +47,8 @@ router.get('/GetLoggedUserData/me', authObj.auth, async (req, res) => {
 router.post('/User/logoutFromOneDevice', authObj.auth, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) => {
-            console.log(token.token)
-            console.log(req.token)
+            //console.log(token.token)
+            //console.log(req.token)
             return token.token !== req.token
         })
 

@@ -1,42 +1,60 @@
 const express = require('express')
-const Cities = require('../DbSchema/cities')
+//const Cities = require('../DbSchema/cities')
 const Salons = require('../DbSchema/salons')
 const authObj = require('../Auth-middlewere/auth')
 const router = new express.Router();
 
 
-router.post('/CreateSalon', authObj.authCity, async (req, res) => {
+router.post('/CreateSalon', async (req, res) => {
     const salon = new Salons(req.body)
     try {
         await salon.save()
-        const city = await Cities.findOne({ cityName: req.city.cityName })
-        console.log(city)
-        city.salonIds.push(salon._id)
-        await city.save()
-        res.status(200).send({ salon, city })
+        // const city = await Cities.findOne({ cityName: req.city.cityName })
+        // console.log(city)
+        // city.salonIds.push(salon._id)
+        // await city.save()
+        res.status(200).send(salon)
 
     } catch (error) {
         res.status(400).send({ error: 'Salon not created' })
     }
 })
-router.get('/GetAllSalonsFromCity', authObj.authCity, async (req, res) => {
+
+router.post('/SalonOwner/Login', async (req, res) => {
     try {
-        const city = await Cities.findOne({ cityName: req.city.cityName })
-        // console.log(city)
-        // console.log(city.populated('salonIds'))
-        await city.populate('salonIds').execPopulate()
-        //console.log(city.populated('salonIds'))
-        // if (!city) {
-        //     res.status(404).send('NOt found')
-        // }
-        res.status(200).send(city.salonIds)
+        //console.log(req.body.emailId, req.body.password)
+        const salon = await Salons.findBYCredentials(req.body.mobileNo, req.body.password)
+        const token = await Salons.generateTokenForSalon()
+        //console.log(user)
+
+        if (!salon) {
+            res.status(404).send()
+        }
+        res.status(200).send({ salon, token })
+
     } catch (error) {
-        res.status(401).send({ error: 'Error grtting all cities' })
+        res.status(400).send({ error: 'Invalid Login details' })
     }
+
 })
-router.patch('/UpdateSalon/:id', authObj.authCity, async (req, res) => {
+// router.get('/GetAllSalonsFromCity', authObj.authCity, async (req, res) => {
+//     try {
+//         const city = await Cities.findOne({ cityName: req.city.cityName })
+//         // console.log(city)
+//         // console.log(city.populated('salonIds'))
+//         await city.populate('salonIds').execPopulate()
+//         //console.log(city.populated('salonIds'))
+//         // if (!city) {
+//         //     res.status(404).send('NOt found')
+//         // }
+//         res.status(200).send(city.salonIds)
+//     } catch (error) {
+//         res.status(401).send({ error: 'Error grtting all cities' })
+//     }
+// })
+router.patch('/LoggedSalonOwner/UpdateSalon', authObj.authSalon, async (req, res) => {
     try {
-        await Salons.findByIdAndUpdate(req.params.id, {
+        await Salons.findByIdAndUpdate(req.salon._id, {
             salonName: req.body.salonName,
             ownerName: req.body.ownerName,
             mobileNo: req.body.mobileNo,
@@ -45,7 +63,9 @@ router.patch('/UpdateSalon/:id', authObj.authCity, async (req, res) => {
             closingTime: req.body.closingTime,
             services: req.body.services,
             salontype: req.body.salontype,
-            description: req.body.description
+            description: req.body.description,
+            stateName: req.body.stateName,
+            cityName: req.body.cityName
         })
         const salon = await Salons.findById(req.params.id)
         if (!salon) {
@@ -75,30 +95,30 @@ router.patch('/UpdateSalon/:id', authObj.authCity, async (req, res) => {
     //     res.status(400).send(error)
     // }
 })
-router.delete('/DeleteSalon/:id', authObj.authCity, async (req, res) => {
+router.delete('/DeleteSalon/:id', async (req, res) => {
     try {
         const salon = await Salons.findByIdAndDelete(req.params.id)
 
-        const index = req.city.salonIds.indexOf(salon._id)
-        req.city.salonIds.splice(index, 1)
+        // const index = req.city.salonIds.indexOf(salon._id)
+        // req.city.salonIds.splice(index, 1)
 
-        await req.city.save()
-        const city = req.city
-        res.status(200).send({ city, salon })
+        // await req.city.save()
+        // const city = req.city
+        res.status(200).send(salon)
     } catch (error) {
         res.status(401).send({ error: 'salon not deleted' })
     }
 })
 
-router.delete('/DeleteAllsalons', authObj.authCity, async (req, res) => {
+router.delete('/DeleteAllsalons', async (req, res) => {
     try {
         // const cityIdsCount = req.state.cityIds.length
         // console.log(cityIdsCount)
         const salon = await Salons.deleteMany()
-        req.city.salonIds.splice(0, req.city.salonIds.length)
-        const city = req.city
-        await req.city.save()
-        res.status(200).send({ salon, city })
+        // req.city.salonIds.splice(0, req.city.salonIds.length)
+        // const city = req.city
+        // await req.city.save()
+        res.status(200).send(salon)
     } catch (error) {
         res.status(401).send({ error: 'Salons not deleted' })
     }

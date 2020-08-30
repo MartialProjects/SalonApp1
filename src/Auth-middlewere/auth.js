@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
 const User = require('../DbSchema/user')
 const States = require('../DbSchema/states')
-const Cities = require('../DbSchema/cities')
+//const Cities = require('../DbSchema/cities')
+const Salons = require('../DbSchema/salons')
 
 const auth = async (req, res, next) => {
     try {
@@ -25,7 +26,6 @@ const auth = async (req, res, next) => {
     }
 
 }
-
 const authState = async (req, res, next) => {
     try {
         const stateToken = req.header('Authorization').replace('Bearer ', '');
@@ -41,25 +41,44 @@ const authState = async (req, res, next) => {
         res.status(400).send({ error: 'Invalid authentication for state' })
     }
 }
-const authCity = async (req, res, next) => {
+const authSalon = async (req, res, next) => {
 
     try {
-        const cityToken = req.header('Authorization').replace('Bearer ', '');
-        const decodedCityToken = jwt.verify(cityToken, process.env.JWT_CITY);
-        const city = await Cities.findOne({ _id: decodedCityToken._id })
-        console.log(city)
-        if (!city) {
-            throw new Error({ error: 'Invalid authentication for city' });
+        const salonToken = req.header('Authorization').replace('Bearer ', '');
+        const decodedSalonToken = jwt.verify(salonToken, process.env.JWT_SALON);
+        const salon = await Salons.findOne({ _id: decodedSalonToken._id })
+        console.log(salon)
+        if (!salon) {
+            throw new Error({ error: 'Invalid authentication for salon' });
         }
         console.log(city)
-        req.token = cityToken;
-        req.city = city
+        req.token = salonToken;
+        req.salon = salon
         next()
     } catch (error) {
-        res.status(400).send({ error: 'Invalid authentication for city' })
+        res.status(400).send({ error: 'Invalid authentication for salon' })
     }
 }
+// const authCity = async (req, res, next) => {
+
+//     try {
+//         const cityToken = req.header('Authorization').replace('Bearer ', '');
+//         const decodedCityToken = jwt.verify(cityToken, process.env.JWT_CITY);
+//         const city = await Cities.findOne({ _id: decodedCityToken._id })
+//         console.log(city)
+//         if (!city) {
+//             throw new Error({ error: 'Invalid authentication for city' });
+//         }
+//         console.log(city)
+//         req.token = cityToken;
+//         req.city = city
+//         next()
+//     } catch (error) {
+//         res.status(400).send({ error: 'Invalid authentication for city' })
+//     }
+// }
 
 module.exports.auth = auth
 module.exports.authState = authState
-module.exports.authCity = authCity
+module.exports.authSalon = authSalon
+//module.exports.authCity = authCity

@@ -38,21 +38,21 @@ router.get('/GetAllCitiesFromState', authObj.authState, async (req, res) => {
         res.status(401).send({ error: 'Error gettting all cities' })
     }
 })
-router.post('/SelectCityByName', async (req, res) => {
+// router.post('/SelectCityByName', async (req, res) => {
 
-    try {
-        const city = await Cities.findOne({ cityName: req.body.cityName })
-        // console.log(state)
-        const token = await city.generateTokenForCity()
+//     try {
+//         const city = await Cities.findOne({ cityName: req.body.cityName })
+//         console.log(state)
+//         const token = await city.generateTokenForCity()
 
-        if (!city) {
-            res.status(404).send('NOt found')
-        }
-        res.status(201).send({ city, token })
-    } catch (error) {
-        res.status(401).send({ error: 'Error selecting city' })
-    }
-})
+//         if (!city) {
+//             res.status(404).send('NOt found')
+//         }
+//         res.status(201).send({ city, token })
+//     } catch (error) {
+//         res.status(401).send({ error: 'Error selecting city' })
+//     }
+// })
 
 router.patch('/UpdateCity/:id', authObj.authState, async (req, res) => {
     try {
