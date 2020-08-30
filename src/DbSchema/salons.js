@@ -71,7 +71,13 @@ var salonSchema = new Schema({
     cityName: {
         type: String,
         required: true
-    }
+    },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }],
 
 
 })
@@ -104,8 +110,10 @@ salonSchema.pre('save', async function (next) {
 
 })
 salonSchema.methods.generateTokenForSalon = async function () {
-
-    const token = jwt.sign({ _id: this._id.toString() }, process.env.JWT_SALON)
+    const salon = this
+    const token = jwt.sign({ _id: salon._id.toString() }, process.env.JWT_SALON)
+    salon.tokens = salon.tokens.concat({ token })
+    await salon.save()
     return token
 }
 

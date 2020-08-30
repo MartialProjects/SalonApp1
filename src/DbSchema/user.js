@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema({
             required: true
         }
     }],
-    avatar: {
+    profilePhoto: {
         type: Buffer
     }
 
@@ -77,7 +77,7 @@ userSchema.methods.toJSON = function () {
 
     delete userObject.password
     delete userObject.tokens
-    delete userObject.avatar //this deletes sending image response every time
+    // delete userObject.avatar //this deletes sending image response every time
     return userObject
 }
 userSchema.methods.generateAuthToken = async function () {
