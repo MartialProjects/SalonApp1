@@ -11,9 +11,10 @@ const port = process.env.PORT;
 
 
 app.use(function (req, res, next) {
+    res.header("Content-Type", "application/json");
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-    res.header("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Request-Headers");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization");
     next()
 })
 //For maintainenece activity if wont site to down
