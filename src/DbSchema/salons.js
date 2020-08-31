@@ -10,7 +10,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
-//const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 var salonSchema = new Schema({
     salonName: {
@@ -38,6 +38,9 @@ var salonSchema = new Schema({
                 throw new Error('Dont include "pasword" ')
             }
         }
+    },
+    shopImage: {
+        type: Buffer
     },
     subLocation: {
         type: String
@@ -81,15 +84,26 @@ var salonSchema = new Schema({
 
 
 })
+salonSchema.methods.toJSON = function () {
+    const salon = this
 
-salonSchema.statics.findBYCredentials = async (mobileNo, password) => {
+    const salonObject = salon.toObject()
+
+    delete salonObject.password
+    delete salonObject.tokens
+    delete salonObject.shopImage //this deletes sending image response every time
+    return salonObject
+}
+
+salonSchema.statics.findSalonBYCredentials = async (mobileNo, password) => {
 
     const salon = await Salons.findOne({ mobileNo })
-    console.log(salon)
+    //console.log(salon)
     if (!salon) {
         throw new Error('Unable to login')
     }
     const isMatch = await bcrypt.compare(password, salon.password)
+    // console.log(isMatch)
     if (!isMatch) {
         throw new Error('Unable to login')
     }

@@ -1,14 +1,11 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-    description: {
-        type: String,
-        required: true
-    },
-    completed: {
-        type: Boolean,
-        default: false
-    },
+    servicesByUser: [{
+        serviceName: String,
+        servicePrice: Number,
+        completed: Boolean
+    }],
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,

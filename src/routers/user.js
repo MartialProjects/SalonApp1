@@ -5,6 +5,33 @@ const sharp = require('sharp')
 const router = new express.Router();
 const authObj = require('../Auth-middlewere/auth')
 
+//Image uploading
+
+const upload = multer({
+    //dest: 'avatars',
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Please upload image file'))
+        }
+
+        cb(undefined, true)
+    }
+
+})
+router.post('/Users/me/uploadPhoto', authObj.auth, upload.single('UserProfilePhoto'), async (req, res) => {
+    const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer()
+    req.user.profilePhoto = buffer
+    await req.user.save()
+    res.send('File uploaded')
+
+}, (err, req, res, next) => {
+    res.status(400).send({ error: err.message })
+})
+
+
 router.post('/CreateUser', async (req, res) => {
     const user = new User(req.body);
     //console.log(user._id)
@@ -41,7 +68,12 @@ router.post('/User/login', async (req, res) => {
 })
 
 router.get('/GetLoggedUserData/me', authObj.auth, async (req, res) => {
-    res.status(200).send(req.user)
+    //res.status(200).send(req.user)
+    try {
+        res.type(/\(json)|(png)/).send(req.user)
+    } catch (error) {
+        res.status(400).send({ error: 'Not to display' })
+    }
 })
 
 router.post('/User/logoutFromOneDevice', authObj.auth, async (req, res) => {
@@ -131,33 +163,9 @@ router.delete('/DeleteUserAndOrders/me', authObj.auth, async (req, res) => {
     }
 
 })
-//Image uploading
-
-const upload = multer({
-    //dest: 'avatars',
-    limits: {
-        fileSize: 1000000
-    },
-    fileFilter(req, file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-            return cb(new Error('Please upload image file'))
-        }
-
-        cb(undefined, true)
-    }
-
-})
-router.post('/Users/me/uploadPhoto', authObj.auth, upload.single('avatar'), async (req, res) => {
-    const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer()
-    req.user.profilePhoto = buffer
-    await req.user.save()
-    res.send('File uploaded')
-
-}, (err, req, res, next) => {
-    res.status(400).send({ error: err.message })
-})
 
 router.get('/GetUserProfilePhoto/:id', async (req, res) => {
+    //  req.accepts(['json', 'png'])
     try {
         const user = await User.findById(req.params.id)
 
@@ -167,13 +175,16 @@ router.get('/GetUserProfilePhoto/:id', async (req, res) => {
 
         res.set('Content-Type', 'image/png')
         res.send(user.profilePhoto)
+        // res
+        //     .contentType("image/png", "application/json")
+        //     .send(user)
     } catch (error) {
         res.status(400).send()
     }
 })
 
-router.delete('/Users/me/uploadPhoto', authObj.auth, async (req, res) => {
-    req.user.avatar = undefined
+router.delete('/Users/me/deleteprofilePhoto', authObj.auth, async (req, res) => {
+    req.user.profilePhoto = undefined
     await req.user.save()
     res.status(200).send('Deleted')
 })
