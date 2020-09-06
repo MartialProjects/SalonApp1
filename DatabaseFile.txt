@@ -1,0 +1,70 @@
+{
+    "salonName":"Avengers",
+    "ownerName":"Tony",
+    "mobileNo": 8879967287,
+    "password":"Tony@123478",
+    "subLocation":"Ravivar Peth",
+    "openingTime":"9:00" ,
+    "closingTime":"8:00",
+    "services": [{"serviceName":"Facial","price":70}],
+    "salontype": "FEMALE",
+    "description": "Available",
+    "stateName":"Maharashtra",
+    "cityName":"Kolhapur"
+}
+{
+    "salonName":"Abhis",
+    "ownerName":"Omkar",
+    "mobileNo": 8878967287,
+    "password":"Omkar@123478",
+    "subLocation":"Ravivar Peth",
+    "openingTime":"9:00" ,
+    "closingTime":"8:00",
+    "services": [{"serviceName":"Facial","price":70}],
+    "salontype": "FEMALE",
+    "description": "Available",
+    "stateName":"Maharashtra",
+    "cityName":"Pune"
+}
+{
+    "salonName":"Alex",
+    "ownerName":"Kuldeep",
+    "mobileNo": 8878967288,
+    "password":"Kuldeep@123478",
+    "subLocation":"Bhudhwar Peth",
+    "openingTime":"9:00" ,
+    "closingTime":"8:00",
+    "services": [{"serviceName":"Facial","price":70}],
+    "salontype": "UNISEX",
+    "description": "Available",
+    "stateName":"Maharashtra",
+    "cityName":"Pune"
+}
+{
+    "salonName":"Radiant touch",
+    "ownerName":"Swapnil",
+    "mobileNo": 8878667288,
+    "password":"Swapnil@123478",
+    "subLocation":"ShivajiNagarh",
+    "openingTime":"9:00" ,
+    "closingTime":"8:00",
+    "services": [{"serviceName":"Facial","price":70}],
+    "salontype": "UNISEX",
+    "description": "Available",
+    "stateName":"Maharashtra",
+    "cityName":"Pune"
+}
+{
+    "salonName":"Scooper",
+    "ownerName":"Javed",
+    "mobileNo": 8878663355,
+    "password":"Javed@123478",
+    "subLocation":"GokulNagar",
+    "openingTime":"9:00" ,
+    "closingTime":"8:00",
+    "services": [{"serviceName":"Facial","price":70}],
+    "salontype": "FEMALE",
+    "description": "Available",
+    "stateName":"Maharashtra",
+    "cityName":"Sangli"
+}

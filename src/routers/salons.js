@@ -64,6 +64,36 @@ router.post('/SalonOwner/Login', async (req, res) => {
     }
 
 })
+router.post('/Salon/ForgotPassword', async (req, res) => {
+    try {
+        const salon = await Salons.findOne({ mobileNo: req.body.mobileNo })
+
+        if (!salon) {
+            res.status(404).send('Not found')
+
+        }
+        res.status(201).send(salon)
+
+    } catch (error) {
+        res.status(401).send({ error: 'User not found' })
+    }
+})
+router.patch('/Salon/UpdatePassword', async (req, res) => {
+    try {
+        const salon = await Salons.findOne({ mobileNo: req.body.mobileNo })
+
+        if (!salon) {
+            res.status(404).send('Not found')
+
+        }
+        salon.password = req.body.password
+        await salon.save()
+        res.status(201).send('Password Updated succesfully')
+
+    } catch (error) {
+        res.status(401).send({ error: 'Password not updated' })
+    }
+})
 
 router.post('/GetAllSalonfrom/SelectedStateNCity', async (req, res) => {
     try {
@@ -125,49 +155,51 @@ router.get('/SelectSalonById/:id', async (req, res) => {
 //         res.status(401).send({ error: 'Error grtting all cities' })
 //     }
 // })
-router.patch('/LoggedSalonOwner/UpdateSalon', authObj.authSalon, async (req, res) => {
-    try {
-        const salon = await Salons.findByIdAndUpdate(req.salon._id, {
-            salonName: req.body.salonName,
-            ownerName: req.body.ownerName,
-            mobileNo: req.body.mobileNo,
-            password: req.body.password,
-            subLocation: req.body.subLocation,
-            openingTime: req.body.openingTime,
-            closingTime: req.body.closingTime,
-            services: req.body.services,
-            salontype: req.body.salontype,
-            description: req.body.description,
-            stateName: req.body.stateName,
-            cityName: req.body.cityName
-        })
 
-        if (!salon) {
-            res.status(404).send('Not Updated')
-        }
-        res.status(200).send(salon)
-    } catch (error) {
-        res.status(401).send({ error: 'Salon not updated' })
-    }
-    // const updates = Object.keys(req.body)
-    // // const allowedUpdates = ['salonName', 'ownerName', 'mobileNo', 'subLocation', 'openingTime', 'closingTime', 'services', 'salontype', 'description']
-    // // const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
-    // // if (!isValidOperation) {
-    // //     return res.status(400).send({ error: 'Invalid updates' })
-    // // }
+
+router.patch('/LoggedSalonOwner/UpdateSalon', authObj.authSalon, async (req, res) => {
     // try {
-    //     const salon = await Salons.findOne({ _id: req.params.id })
-    //     console.log(salon)
+    //     const salon = await Salons.findByIdAndUpdate(req.salon._id, {
+    //         salonName: req.body.salonName,
+    //         ownerName: req.body.ownerName,
+    //         mobileNo: req.body.mobileNo,
+    //         password: req.body.password,
+    //         subLocation: req.body.subLocation,
+    //         openingTime: req.body.openingTime,
+    //         closingTime: req.body.closingTime,
+    //         services: req.body.services,
+    //         salontype: req.body.salontype,
+    //         description: req.body.description,
+    //         stateName: req.body.stateName,
+    //         cityName: req.body.cityName
+    //     })
+
     //     if (!salon) {
-    //         return res.status(404).send(order)
+    //         res.status(404).send('Not Updated')
     //     }
-    //     updates.forEach((update) => salon[update] = req.body[update])
-    //     console.log(salon)
-    //     await salon.save()
     //     res.status(200).send(salon)
     // } catch (error) {
-    //     res.status(400).send(error)
+    //     res.status(401).send({ error: 'Salon not updated' })
     // }
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['salonName', 'ownerName', 'mobileNo', 'password', 'subLocation', 'openingTime', 'closingTime', 'services', 'salontype', 'description', 'cityName', 'stateName']
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+    if (!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates' })
+    }
+    try {
+        const salon = await Salons.findOne({ _id: req.salon._id })
+        console.log(salon)
+        if (!salon) {
+            return res.status(404).send(order)
+        }
+        updates.forEach((update) => salon[update] = req.body[update])
+        console.log(salon)
+        await salon.save()
+        res.status(200).send(salon)
+    } catch (error) {
+        res.status(400).send(error)
+    }
 })
 router.delete('/DeleteLoggedSalon/me', authObj.authSalon, async (req, res) => {
     try {
@@ -239,20 +271,27 @@ router.delete('/DeleteAllsalons', async (req, res) => {
     }
 })
 
-router.get('/GetSalonImage/:id', async (req, res) => {
+router.get('/GetSalonPhoto', authObj.authSalon, async (req, res) => {
+    //  req.accepts(['json', 'png'])
     try {
-        const salon = await Salons.findById(req.params.id)
+        const salon = req.salon
+
+        //const picture = await Pictures.findById(user._id)
 
         if (!salon || !salon.shopImage) {
             throw new Error()
         }
 
         res.set('Content-Type', 'image/png')
-        res.send(salon.shopImage)
+        res.status(200).send(salon.shopImage)
+        // res
+        //     .contentType("image/png", "application/json")
+        //     .send(user)
     } catch (error) {
-        res.status(400).send()
+        res.status(400).send(error)
     }
 })
+
 
 router.delete('/Salon/me/deleteShopImage', authObj.authSalon, async (req, res) => {
     req.salon.shopImage = undefined

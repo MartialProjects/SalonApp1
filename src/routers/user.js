@@ -2,6 +2,7 @@ const express = require('express')
 const User = require('../DbSchema/user')
 const multer = require('multer')
 const sharp = require('sharp')
+//const Pictures = require('../DbSchema/Images')
 const router = new express.Router();
 const authObj = require('../Auth-middlewere/auth')
 
@@ -25,6 +26,9 @@ router.post('/Users/me/uploadPhoto', authObj.auth, upload.single('UserProfilePho
     const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer()
     req.user.profilePhoto = buffer
     await req.user.save()
+
+
+
     res.send('File uploaded')
 
 }, (err, req, res, next) => {
@@ -62,15 +66,18 @@ router.post('/User/login', async (req, res) => {
         }
         res.status(200).send({ user, token })
 
+
     } catch (error) {
         res.status(400).send({ error: 'Invalid Login details' })
     }
 })
 
+
 router.get('/GetLoggedUserData/me', authObj.auth, async (req, res) => {
     //res.status(200).send(req.user)
     try {
-        res.type(/\(json)|(png)/).send(req.user)
+        res.status(200).send(req.user)
+        //res.redirect('/GetUserProfilePhoto')
     } catch (error) {
         res.status(400).send({ error: 'Not to display' })
     }
@@ -112,6 +119,38 @@ router.post('/User/logOutFromAllDevices', authObj.auth, async (req, res) => {
 
 //     }
 // })
+
+router.post('/User/ForgotPassword', async (req, res) => {
+    try {
+        const user = await User.findOne({ mobileNo: req.body.mobileNo })
+
+        if (!user) {
+            res.status(404).send('Not found')
+
+        }
+        res.status(201).send(user)
+
+    } catch (error) {
+        res.status(401).send({ error: 'User not found' })
+    }
+})
+
+router.patch('/User/UpdatePassword', async (req, res) => {
+    try {
+        const user = await User.findOne({ mobileNo: req.body.mobileNo })
+
+        if (!user) {
+            res.status(404).send('Not found')
+
+        }
+        user.password = req.body.password
+        await user.save()
+        res.status(201).send('Password Updated succesfully')
+
+    } catch (error) {
+        res.status(401).send({ error: 'Password not updated' })
+    }
+})
 router.get('/GetUserById/:id', async (req, res) => {
     const _id = req.params.id
 
@@ -149,37 +188,50 @@ router.patch('/UpdateUser/me', authObj.auth, async (req, res) => {
         res.status(400).send({ error: 'User not updated' })
     }
 })
-router.delete('/DeleteUserAndOrders/me', authObj.auth, async (req, res) => {
-    try {
-        //const user = await User.findByIdAndDelete(req.user._id);
-        // if (!user) {
-        //     res.status(404).send()
-        // }
-        await req.user.remove()
-        res.status(200).send(req.user)
+// router.delete('/DeleteUserAndOrders/me', authObj.auth, async (req, res) => {
+//     try {
+//         //const user = await User.findByIdAndDelete(req.user._id);
+//         // if (!user) {
+//         //     res.status(404).send()
+//         // }
+//         await req.user.remove()
+//         res.status(200).send(req.user)
 
-    } catch (error) {
-        res.status(400).send({ error: 'Not delted' })
-    }
+//     } catch (error) {
+//         res.status(400).send({ error: 'Not delted' })
+//     }
 
-})
+// })
 
-router.get('/GetUserProfilePhoto/:id', async (req, res) => {
+// router.get('/GetAllUserProfilePhotos', async (req, res) => {
+//     try {
+//         const picture = await Pictures.find({})
+//         res.set('Content-Type', 'image/png')
+//         res.status(200).send(picture)
+
+//     } catch (error) {
+//         res.status(400).send(error)
+//     }
+// })
+
+router.get('/GetUserProfilePhoto', authObj.auth, async (req, res) => {
     //  req.accepts(['json', 'png'])
     try {
-        const user = await User.findById(req.params.id)
+        const user = req.user
+
+        //const picture = await Pictures.findById(user._id)
 
         if (!user || !user.profilePhoto) {
             throw new Error()
         }
 
         res.set('Content-Type', 'image/png')
-        res.send(user.profilePhoto)
+        res.status(200).send(user.profilePhoto)
         // res
         //     .contentType("image/png", "application/json")
         //     .send(user)
     } catch (error) {
-        res.status(400).send()
+        res.status(400).send(error)
     }
 })
 

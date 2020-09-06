@@ -53,15 +53,15 @@ const userSchema = new mongoose.Schema({
         }
 
     },
+    profilePhoto: {
+        type: Buffer
+    },
     tokens: [{
         token: {
             type: String,
             required: true
         }
     }],
-    profilePhoto: {
-        type: Buffer//.from('base64')
-    },
     orderCount: {
         type: Number
     }
