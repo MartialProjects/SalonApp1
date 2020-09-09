@@ -96,10 +96,10 @@ userSchema.methods.generateAuthToken = async function () {
 
 
 }
-userSchema.statics.findBYCredentials = async (emailId, password) => {
+userSchema.statics.findBYCredentials = async (mobileNo, password) => {
 
-    const user = await User.findOne({ emailId })
-    console.log(user)
+    const user = await User.findOne({ mobileNo })
+    //console.log(user)
     if (!user) {
         throw new Error('Unable to login')
     }

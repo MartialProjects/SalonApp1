@@ -5,6 +5,7 @@ const multer = require('multer')
 const sharp = require('sharp')
 const authObj = require('../Auth-middlewere/auth')
 const router = new express.Router();
+//const TimeSlots = require('../DbSchema/Timeslots')
 
 //Image uploading for salons services
 const upload = multer({
@@ -33,18 +34,20 @@ router.post('/Salon/UploadImage', authObj.authSalon, upload.single('SalonImage')
 router.post('/CreateSalon', async (req, res) => {
     const salon = new Salons(req.body)
     try {
-        await salon.save()
-        // const city = await Cities.findOne({ cityName: req.city.cityName })
-        // console.log(city)
-        // city.salonIds.push(salon._id)
-        // await city.save()
+        //console.log(salon)
         const token = await salon.generateTokenForSalon()
+        const timeslotArray = salon.generateTimeslots()
+        //console.log(salon)
+        salon.TimeSlotForBooking = timeslotArray
+        await salon.save()
+
         res.status(200).send({ salon, token })
 
     } catch (error) {
         res.status(400).send({ error: 'Salon not created' })
     }
 })
+
 
 router.post('/SalonOwner/Login', async (req, res) => {
     try {

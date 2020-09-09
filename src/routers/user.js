@@ -57,7 +57,7 @@ router.post('/CreateUser', async (req, res) => {
 router.post('/User/login', async (req, res) => {
     try {
         //console.log(req.body.emailId, req.body.password)
-        const user = await User.findBYCredentials(req.body.emailId, req.body.password)
+        const user = await User.findBYCredentials(req.body.mobileNo, req.body.password)
         const token = await user.generateAuthToken()
         //console.log(user)
 
@@ -168,6 +168,8 @@ router.get('/GetUserById/:id', async (req, res) => {
 
 })
 
+
+
 router.patch('/UpdateUser/me', authObj.auth, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name', 'emailId', 'password', 'age']
@@ -188,20 +190,20 @@ router.patch('/UpdateUser/me', authObj.auth, async (req, res) => {
         res.status(400).send({ error: 'User not updated' })
     }
 })
-// router.delete('/DeleteUserAndOrders/me', authObj.auth, async (req, res) => {
-//     try {
-//         //const user = await User.findByIdAndDelete(req.user._id);
-//         // if (!user) {
-//         //     res.status(404).send()
-//         // }
-//         await req.user.remove()
-//         res.status(200).send(req.user)
+router.delete('/DeleteUserAndOrders/me', authObj.auth, async (req, res) => {
+    try {
+        //const user = await User.findByIdAndDelete(req.user._id);
+        // if (!user) {
+        //     res.status(404).send()
+        // }
+        await req.user.remove()
+        res.status(200).send(req.user)
 
-//     } catch (error) {
-//         res.status(400).send({ error: 'Not delted' })
-//     }
+    } catch (error) {
+        res.status(400).send({ error: 'Not delted' })
+    }
 
-// })
+})
 
 // router.get('/GetAllUserProfilePhotos', async (req, res) => {
 //     try {

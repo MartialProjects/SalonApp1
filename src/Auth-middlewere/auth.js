@@ -47,7 +47,7 @@ const authSalon = async (req, res, next) => {
         const salonToken = req.header('Authorization').replace('Bearer ', '');
         const decodedSalonToken = jwt.verify(salonToken, process.env.JWT_SALON);
         const salon = await Salons.findOne({ _id: decodedSalonToken._id, 'tokens.token': salonToken })
-        console.log(salon)
+        //  console.log(salon)
         if (!salon) {
             throw new Error({ error: 'Invalid authentication for salon' });
         }

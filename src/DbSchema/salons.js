@@ -47,11 +47,11 @@ var salonSchema = new Schema({
         type: String
     },
     openingTime: {
-        type: String,
+        type: Number,
         required: true
     },
     closingTime: {
-        type: String,
+        type: Number,
         required: true
     },
     services: [{
@@ -82,8 +82,14 @@ var salonSchema = new Schema({
             required: true
         }
     }],
+    TimeSlotForBooking: [{ type: String }]
 
 
+})
+salonSchema.virtual('salonOrders', {
+    ref: 'Order',
+    localField: '_id',
+    foreignField: 'salonOwner'
 })
 salonSchema.methods.toJSON = function () {
     const salon = this
@@ -111,6 +117,55 @@ salonSchema.statics.findSalonBYCredentials = async (mobileNo, password) => {
     return salon
 
 }
+
+salonSchema.methods.generateTimeslots = function () {
+
+    var openingTime = this.openingTime
+    var closingTime = this.closingTime
+    // console.log(openingTime, closingTime)
+    // let hrs = ClosingTime - openingTime
+    //let noOfSlots = Math.trunc(hrs / (3 / 4))
+
+    const timeslotsArray = []
+    timeslotsArray.push(`${openingTime}:${0}0`)
+    var elementToPush
+    let diff = 0
+    while (openingTime !== closingTime) {
+        if (diff === 0) {
+            elementToPush = `${openingTime}:${45}`
+
+            diff = 60 - 45
+            timeslotsArray.push(elementToPush)
+            openingTime++
+        } else if (diff === 15) {
+            elementToPush = `${openingTime}:${30}`
+
+            diff = 60 - 30
+            timeslotsArray.push(elementToPush)
+            openingTime++
+        }
+        else if (diff === 30) {
+            elementToPush = `${openingTime}:${15}`
+            diff = 60 - 15
+            timeslotsArray.push(elementToPush)
+            openingTime++
+        } else if (diff === 45) {
+            elementToPush = `${openingTime}:${0}0`
+            diff = 0
+            timeslotsArray.push(elementToPush)
+            //openingTime++
+        }
+    }
+
+
+
+    // timeslotsArray.forEach(element => {
+    //     console.log(element)
+    // });
+    return timeslotsArray
+}
+
+
 
 salonSchema.pre('save', async function (next) {
 
