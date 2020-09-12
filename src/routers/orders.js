@@ -124,4 +124,15 @@ router.delete('/DeleteOrder/:id', authObj.auth, async (req, res) => {
 
 })
 
+router.get('/GetTimes', (req, res) => {
+    const today = new Date()
+
+    const hrs = today.getHours()
+
+    res.status(200).send({ hrs })
+
+
+
+})
+
 module.exports = router
