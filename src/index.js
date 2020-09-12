@@ -4,6 +4,7 @@ const orderRouter = require('./routers/orders')
 const cityRouter = require('./routers/cities');
 const stateRouter = require('./routers/states')
 const salonRouter = require('./routers/salons')
+const RequiredFunctionObj = require('./RequiredFunctions/UpdateTimes')
 
 require('./db/mongoose');
 const app = express()
@@ -30,6 +31,17 @@ app.use(stateRouter)
 app.use(cityRouter)
 app.use(salonRouter)
 
+
+
+setInterval(() => {
+    const today = new Date()
+    //console.log(today.getHours())
+    if (today.getHours() == 23) {
+        RequiredFunctionObj.ResetAllSlonTimeSlots()
+    }
+}, 1200000)
+
+// setInterval(RequiredFunctions.ResetAllSlonTimeSlots, 1000)
 
 
 

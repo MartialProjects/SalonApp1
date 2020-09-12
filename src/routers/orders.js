@@ -3,9 +3,13 @@ const Order = require('../DbSchema/Orders')
 const authObj = require('../Auth-middlewere/auth')
 const router = new express.Router();
 const Salons = require('../DbSchema/salons')
+const RequiredFunctions = require('../RequiredFunctions/UpdateTimes')
 
 
 router.post('/CreateOrder/BokingOf/ServicesNTimeslots/:id', authObj.auth, async (req, res) => {
+    if (!RequiredFunctions.TakeOrderTakeOrderBasedOnCurrentTime(req.body.TimeSlotForBooking)) {
+        return res.status(406).send("Sorry Booked Time is Elapsed")
+    }
 
     try {
         const salon = await Salons.findById(req.params.id)
