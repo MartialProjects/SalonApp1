@@ -11,9 +11,9 @@ const ResetAllSlonTimeSlots = async () => {
             const timeslotArray = salons[index].generateTimeslots()
             salons[index].TimeSlotForBooking = timeslotArray
             await salons[index].save()
-            console.log(`salon ${index} updated`)
+            // console.log(`salon ${index} updated`)
         }
-        console.log('All salons updated')
+        // console.log('All salons updated')
     } catch (error) {
         throw new Error({ error: "NO salons updated" })
     }

@@ -98,12 +98,12 @@ router.patch('/UpdateOrder/:id', authObj.auth, async (req, res) => {
     }
     try {
         const order = await Order.findOne({ _id: req.params.id, owner: req.user._id })
-        console.log(order)
+        //console.log(order)
         if (!order) {
             return res.status(404).send(order)
         }
         updates.forEach((update) => order[update] = req.body[update])
-        console.log(order)
+        // console.log(order)
         await order.save()
         res.status(200).send(order)
     } catch (error) {
