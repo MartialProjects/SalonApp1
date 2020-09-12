@@ -128,8 +128,9 @@ router.get('/GetTimes', (req, res) => {
     const today = new Date()
 
     const hrs = today.getHours()
+    const min = today.getMinutes()
 
-    res.status(200).send({ hrs })
+    res.status(200).send({ Time: `${hrs}:${min}` })
 
 
 
