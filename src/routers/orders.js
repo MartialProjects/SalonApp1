@@ -134,7 +134,7 @@ router.get('/GetTime', (req, res) => {
 
 router.get('/GetTotalTime', (req, res) => {
     const today = new Date()
-    const totalSec = ((today.getHours() * 3600) + (today.getMinutes() * 60) + (today.getSeconds()))
+    const totalSec = ((today.getHours() * 3600) + (today.getMinutes() * 60) + (today.getSeconds())) - 19905
     res.status(200).send({ Time: totalSec })
 
 
