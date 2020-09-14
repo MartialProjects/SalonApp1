@@ -126,11 +126,9 @@ router.delete('/DeleteOrder/:id', authObj.auth, async (req, res) => {
 
 router.get('/GetTimes', (req, res) => {
     const today = new Date()
+    const totalSec = (today.getHours() * 3600) + (today.getMinutes() * 60)
 
-    const hrs = today.getHours()
-    const min = today.getMinutes()
-
-    res.status(200).send({ Time: `${hrs}:${min}` })
+    res.status(200).send({ Time: totalSec })
 
 
 

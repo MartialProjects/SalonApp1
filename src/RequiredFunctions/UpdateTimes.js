@@ -26,7 +26,7 @@ const TakeOrderBasedOnCurrentTime = (Time) => {
         element = parseInt(element)
     });
     let bookedTime = (arr[0] * 3600) + (arr[1] * 60)
-    let currentTime = (today.getHours() * 3600) + (today.getMinutes() * 60)
+    let currentTime = (today.getHours() * 3600) + (today.getMinutes() * 60) - ((5 * 36000) + (32 * 60))
     if (bookedTime <= currentTime) {
         return false
     } else {
