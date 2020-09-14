@@ -123,10 +123,18 @@ router.delete('/DeleteOrder/:id', authObj.auth, async (req, res) => {
     }
 
 })
-
-router.get('/GetTimes', (req, res) => {
+router.get('/GetTime', (req, res) => {
     const today = new Date()
-    const totalSec = (today.getHours() * 3600) + (today.getMinutes() * 60)
+
+    res.status(200).send({ Time: `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}` })
+
+
+
+})
+
+router.get('/GetTotalTime', (req, res) => {
+    const today = new Date()
+    const totalSec = ((today.getHours() * 3600) + (today.getMinutes() * 60) + (today.getSeconds())) - ((5 * 3600) + (32 * 60))
 
     res.status(200).send({ Time: totalSec })
 
