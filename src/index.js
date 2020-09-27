@@ -33,13 +33,13 @@ app.use(salonRouter)
 
 
 
-setInterval(() => {
-    const today = new Date()
-    //console.log(today.getHours())
-    if (today.getHours() == 23) {
-        RequiredFunctionObj.ResetAllSlonTimeSlots()
-    }
-}, 1200000)
+// setInterval(() => {
+//     const today = new Date()
+//     //console.log(today.getHours())
+//     if (today.getHours() == 23) {
+//         RequiredFunctionObj.ResetAllSlonTimeSlots()
+//     }
+// }, 1200000)
 
 // setInterval(RequiredFunctions.ResetAllSlonTimeSlots, 1000)
 

@@ -17,6 +17,9 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    bookingDate: {
+        type: String
+    },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,

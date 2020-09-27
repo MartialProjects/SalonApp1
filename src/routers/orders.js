@@ -5,9 +5,8 @@ const router = new express.Router();
 const Salons = require('../DbSchema/salons')
 const RequiredFunctions = require('../RequiredFunctions/UpdateTimes')
 
-
 router.post('/CreateOrder/BokingOf/ServicesNTimeslots/:id', authObj.auth, async (req, res) => {
-    if (!RequiredFunctions.TakeOrderTakeOrderBasedOnCurrentTime(req.body.TimeSlotForBooking)) {
+    if (!RequiredFunctions.TakeOrderBasedOnCurrentTime(req.body.TimeSlotForBooking)) {
         return res.status(406).send("Sorry Booked Time is Elapsed")
     }
 
@@ -39,6 +38,36 @@ router.post('/CreateOrder/BokingOf/ServicesNTimeslots/:id', authObj.auth, async 
 
     }
 })
+// router.post('/CreateOrder/BokingOf/ServicesNTimeslots/:id', authObj.auth, async (req, res) => {
+//     const todaysDate = new Date()
+//     const bookedDate = req.body.bookedDate
+//     const dateArr = req.body.bookedDate.split("/")
+//     dateArr[0] = parseInt(dateArr[0])
+
+
+//     try {
+//         if (todaysDate.getDate() === dateArr[0]) {
+//             if (!RequiredFunctions.TakeOrderBasedOnCurrentTime(req.body.BookingTimeSlot)) {
+//                 return res.status(406).send("Sorry Booked Time is Elapsed")
+//             }
+//         }
+//         const servicesCount = req.body.services.length
+//         const bookedTimes = await RequiredFunctions.bookSlot(req.params.id, dateArr[0], servicesCount, req.body.BookingTimeSlot)
+//         const order = new Order({
+//             servicesByUser: req.body.services,
+//             TimeSlotsForBooking: bookedTimes,
+//             completed: req.body.completed,
+//             owner: req.user._id,
+//             salonOwner: req.params.id,
+//             bookingDate: bookedDate
+//         })
+//         await order.save()
+//         res.status(201).send(order)
+//     } catch (error) {
+//         res.status(401).send({ error: "Appointement Not booked" })
+
+//     }
+// })
 
 router.get('/GetOrdersFromLoggedUser', authObj.auth, async (req, res) => {
     try {

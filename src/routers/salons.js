@@ -38,6 +38,8 @@ router.post('/CreateSalon', async (req, res) => {
         const token = await salon.generateTokenForSalon()
         const timeslotArray = salon.generateTimeslots()
         //console.log(salon)
+        // salon.BookingTimeSlot.slot1 = timeslotArray
+        // salon.BookingTimeSlot.slot2 = timeslotArray
         salon.TimeSlotForBooking = timeslotArray
         await salon.save()
 

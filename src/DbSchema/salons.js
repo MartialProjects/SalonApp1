@@ -6,13 +6,12 @@
 // const Salons = mongoose.model('Salon',)
 
 //module.exports = Salons
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 
-var salonSchema = new Schema({
+const salonSchema = new mongoose.Schema({
     salonName: {
         type: String,
         required: true,
@@ -82,10 +81,17 @@ var salonSchema = new Schema({
             required: true
         }
     }],
+    // BookingTimeSlot: {
+    //     slot1: [{ type: String }],
+    //     sLot2: [{ type: String }],
+    //     slot3: [{ type: String }],
+    // }
     TimeSlotForBooking: [{ type: String }]
-
-
 })
+
+
+
+
 salonSchema.virtual('salonOrders', {
     ref: 'Order',
     localField: '_id',
@@ -101,23 +107,6 @@ salonSchema.methods.toJSON = function () {
     delete salonObject.shopImage //this deletes sending image response every time
     return salonObject
 }
-
-salonSchema.statics.findSalonBYCredentials = async (mobileNo, password) => {
-
-    const salon = await Salons.findOne({ mobileNo })
-    //console.log(salon)
-    if (!salon) {
-        throw new Error('Unable to login')
-    }
-    const isMatch = await bcrypt.compare(password, salon.password)
-    // console.log(isMatch)
-    if (!isMatch) {
-        throw new Error('Unable to login')
-    }
-    return salon
-
-}
-
 salonSchema.methods.generateTimeslots = function () {
 
     var openingTime = this.openingTime
@@ -164,6 +153,24 @@ salonSchema.methods.generateTimeslots = function () {
     // });
     return timeslotsArray
 }
+
+salonSchema.statics.findSalonBYCredentials = async (mobileNo, password) => {
+
+    const salon = await Salons.findOne({ mobileNo })
+    //console.log(salon)
+    if (!salon) {
+        throw new Error('Unable to login')
+    }
+    const isMatch = await bcrypt.compare(password, salon.password)
+    // console.log(isMatch)
+    if (!isMatch) {
+        throw new Error('Unable to login')
+    }
+    return salon
+
+}
+
+
 
 
 
