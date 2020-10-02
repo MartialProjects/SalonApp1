@@ -38,6 +38,13 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    salonOwnerMobileNo: {
+        type: Number
+    },
+    salontype: {
+        type: String,
+        required: true
+    },
 })
 // }, {
 //     timestamps: true

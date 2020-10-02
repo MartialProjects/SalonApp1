@@ -26,10 +26,10 @@ router.post('/CreateOrder/BokingOf/ServicesNTimeslots/:id', authObj.auth, async 
             owner: req.user._id,
             salonOwner: req.params.id,
             salonName: salon.salonName,
-            salonOwnerName: salon.ownerName
+            salonOwnerName: salon.ownerName,
+            salonOwnerMobileNo: salon.mobileNo,
+            salontype: salon.salontype
         })
-
-
         await salon.save()
 
 
