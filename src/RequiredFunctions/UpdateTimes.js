@@ -12,9 +12,9 @@ const ResetAllSlonTimeSlots = async () => {
             const timeslotArray = salons[index].generateTimeslots()
             salons[index].TimeSlotForBooking = timeslotArray
             await salons[index].save()
-            console.log(`salon ${index} updated`)
+            //console.log(`salon ${index} updated`)
         }
-        console.log('All salons updated')
+        //console.log('All salons updated')
     } catch (error) {
         throw new Error({ error: "NO salons updated" })
     }
@@ -27,9 +27,9 @@ const TakeOrderBasedOnCurrentTime = (Time) => {
         element = parseInt(element)
     });
     let bookedTime = (arr[0] * 3600) + (arr[1] * 60)
-    //let currentTime = ((today.getHours() * 3600) + (today.getMinutes() * 60) + (today.getSeconds())) + 19905
+    let currentTime = ((today.getHours() * 3600) + (today.getMinutes() * 60) + (today.getSeconds())) + 19905
 
-    let currentTime = ((today.getHours() * 3600) + (today.getMinutes() * 60) + (today.getSeconds()))
+    //let currentTime = ((today.getHours() * 3600) + (today.getMinutes() * 60) + (today.getSeconds()))
 
     if (bookedTime <= currentTime) {
         return false
