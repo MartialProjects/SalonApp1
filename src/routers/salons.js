@@ -5,6 +5,7 @@ const multer = require('multer')
 const sharp = require('sharp')
 const authObj = require('../Auth-middlewere/auth')
 const router = new express.Router();
+const RequiredFunctions = require('../RequiredFunctions/UpdateTimes')
 //const TimeSlots = require('../DbSchema/Timeslots')
 
 //Image uploading for salons services
@@ -304,5 +305,13 @@ router.delete('/Salon/me/deleteShopImage', authObj.authSalon, async (req, res) =
     res.status(200).send('Deleted')
 })
 
+router.get('/ResetAllSalonTimeSlots', async (req, res) => {
+    try {
+        await RequiredFunctions.ResetAllSlonTimeSlots()
+        res.send('Timeslots updted')
+    } catch (error) {
+        res.status(400).send({ error: "No timeslot updated" })
+    }
+})
 
 module.exports = router

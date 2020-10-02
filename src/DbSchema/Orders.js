@@ -29,7 +29,15 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'Salon'
-    }
+    },
+    salonName: {
+        type: String,
+        required: true,
+    },
+    salonOwnerName: {
+        type: String,
+        required: true,
+    },
 })
 // }, {
 //     timestamps: true

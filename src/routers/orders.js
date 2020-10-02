@@ -24,7 +24,9 @@ router.post('/CreateOrder/BokingOf/ServicesNTimeslots/:id', authObj.auth, async 
             TimeSlotsForBooking: bookedTimes,
             completed: req.body.completed,
             owner: req.user._id,
-            salonOwner: req.params.id
+            salonOwner: req.params.id,
+            salonName: salon.salonName,
+            salonOwnerName: salon.ownerName
         })
 
 
