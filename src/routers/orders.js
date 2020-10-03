@@ -108,7 +108,7 @@ router.get('/CompletedOrders/GetOrdersFromLoggedUser', authObj.auth, async (req,
             return res.status(200).send('No Completed Orders yet')
         }
         for (let index = 0; index < AllOrdersArray.length; index++) {
-            console.log(AllOrdersArray[index].OrderStatus)
+            //console.log(AllOrdersArray[index].OrderStatus)
             if (AllOrdersArray[index].OrderStatus === 'COMPLETED') {
                 CompletedOrders.push(AllOrdersArray[index])
             }
@@ -207,7 +207,7 @@ router.post('/Orders/ChangeStatus', async (req, res) => {
 
             orders[index].OrderStatus = 'COMPLETED'
             await orders[index].save()
-            console.log(`Order-${index} OrderStatus-${orders[index].OrderStatus} updated`)
+            //console.log(`Order-${index} OrderStatus-${orders[index].OrderStatus} updated`)
         }
 
         res.status(201).send("OrderStatus of Orders of passed date Updated")
