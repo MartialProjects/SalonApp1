@@ -6,9 +6,10 @@ const orderSchema = new mongoose.Schema({
         price: Number
 
     }],
-    completed: {
-        type: Boolean,
-        default: false
+    OrderStatus: {
+        type: String,
+        enum: ['PENDING', 'COMPLETED'],
+        default: 'PENDING'
     },
     TimeSlotsForBooking: [{
         type: String
