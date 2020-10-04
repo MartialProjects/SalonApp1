@@ -39,9 +39,10 @@ router.post('/CreateSalon', async (req, res) => {
         const token = await salon.generateTokenForSalon()
         const timeslotArray = salon.generateTimeslots()
         //console.log(salon)
-        // salon.BookingTimeSlot.slot1 = timeslotArray
-        // salon.BookingTimeSlot.slot2 = timeslotArray
-        salon.TimeSlotForBooking = timeslotArray
+        salon.BookingTimeSlot.slot1 = timeslotArray
+        salon.BookingTimeSlot.slot2 = timeslotArray
+        salon.BookingTimeSlot.slot3 = timeslotArray
+        //salon.TimeSlotForBooking = timeslotArray
         await salon.save()
 
         res.status(200).send({ salon, token })
@@ -307,7 +308,7 @@ router.delete('/Salon/me/deleteShopImage', authObj.authSalon, async (req, res) =
 
 router.get('/ResetAllSalonTimeSlots', async (req, res) => {
     try {
-        await RequiredFunctions.ResetAllSlonTimeSlots()
+        RequiredFunctions.ResetAllSlonTimeSlots()
         res.send('Timeslots updted')
     } catch (error) {
         res.status(400).send({ error: "No timeslot updated" })

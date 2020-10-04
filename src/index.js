@@ -34,15 +34,15 @@ app.use(salonRouter)
 
 
 
-// setInterval(() => {
-//     const today = new Date()
-//     //console.log(today.getHours())
-//     if (today.getHours() == 23) {
-//         RequiredFunctionObj.ResetAllSlonTimeSlots()
-//     }
-// }, 1200000)
+setInterval(() => {
+    const today = new Date()
+    //console.log(today.getHours())
+    if (today.getHours() == 18) {
+        RequiredFunctionObj.ResetAllSlonTimeSlots()
+    }
+}, 900000)
 
-// setInterval(RequiredFunctions.ResetAllSlonTimeSlots, 1000)
+
 
 
 
@@ -51,20 +51,6 @@ app.listen(port, () => {
     console.log('Server listen on ' + port)
 })
 
-// const User = require('./DbSchema/user')
-// const Order = require('./DbSchema/Orders')
 
 
-/*This is below just example function to show ho we can access
- order from user and user from orders
-*/
-// const main = async () => {
-//     const order = await Order.findById('5f423fb92d0030079cbab665')
-//     await order.populate('owner').execPopulate()
-//     console.log(order.owner)
 
-//     // const user = await User.findById('5f3790c7d12e302f907a77c4')
-//     // await user.populate('myOrders').execPopulate()
-//     // console.log(user.myOrders)
-// }
-// main()

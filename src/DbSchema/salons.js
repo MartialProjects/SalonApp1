@@ -81,12 +81,12 @@ const salonSchema = new mongoose.Schema({
             required: true
         }
     }],
-    // BookingTimeSlot: {
-    //     slot1: [{ type: String }],
-    //     sLot2: [{ type: String }],
-    //     slot3: [{ type: String }],
-    // }
-    TimeSlotForBooking: [{ type: String }]
+    BookingTimeSlot: {
+        slot1: [{ type: String }],
+        slot2: [{ type: String }],
+        slot3: [{ type: String }]
+    }
+    //TimeSlotForBooking: [{ type: String }]
 })
 
 
