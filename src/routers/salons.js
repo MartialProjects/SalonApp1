@@ -308,7 +308,7 @@ router.delete('/Salon/me/deleteShopImage', authObj.authSalon, async (req, res) =
 
 router.get('/ResetAllSalonTimeSlots', async (req, res) => {
     try {
-        RequiredFunctions.ResetAllSlonTimeSlots()
+        await RequiredFunctions.ResetAllSlonTimeSlots()
         res.send('Timeslots updted')
     } catch (error) {
         res.status(400).send({ error: "No timeslot updated" })
