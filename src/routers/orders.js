@@ -159,8 +159,12 @@ router.delete('/DeleteOrder/:id', authObj.auth, async (req, res) => {
 router.get('/GetTime', (req, res) => {
     const today = new Date()
 
-    res.status(200).send({ Time: `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}` })
 
+    let Time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+    let date = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`
+
+
+    res.status(200).send({ Time, date })
 
 
 })
@@ -181,13 +185,6 @@ router.post('/Orders/ChangeStatus', async (req, res) => {
     }
 })
 
-router.get('/GetTotalTime', (req, res) => {
-    const today = new Date()
-    const totalSec = ((today.getHours() * 3600) + (today.getMinutes() * 60) + (today.getSeconds())) - 19905
-    res.status(200).send({ Time: totalSec })
 
-
-
-})
 
 module.exports = router
