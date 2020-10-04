@@ -4,6 +4,7 @@ const orderRouter = require('./routers/orders')
 const cityRouter = require('./routers/cities');
 const stateRouter = require('./routers/states')
 const salonRouter = require('./routers/salons')
+var schedule = require('node-schedule');
 const RequiredFunctionObj = require('./RequiredFunctions/UpdateTimes')
 
 require('./db/mongoose');
@@ -34,15 +35,19 @@ app.use(salonRouter)
 
 
 
-setInterval(() => {
-    const today = new Date()
-    //console.log(today.getHours())
-    if (today.getHours() == 18) {
-        RequiredFunctionObj.ResetAllSlonTimeSlots()
-    }
-}, 900000)
+// setInterval(() => {
+//     const today = new Date()
+//     //console.log(today.getHours())
+//     if (today.getHours() == 18) {
+//         RequiredFunctionObj.ResetAllSlonTimeSlots()
+//     }
+// }, 900000)
+const today = new Date()
+var date = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 18, 27, 0);
 
-
+var j = schedule.scheduleJob(date, function () {
+    RequiredFunctionObj.ResetAllSlonTimeSlots()
+});
 
 
 
